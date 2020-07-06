@@ -103,6 +103,7 @@ The environment needed for testing the Dress Detection Classifier is all set up 
 
 ### 4. Label pictures
 
+
 ### 5. Generate *.csv* and *tfrecord files*
 
 ### 6. Create Label Map
@@ -110,6 +111,12 @@ The environment needed for testing the Dress Detection Classifier is all set up 
 ### 7. Training
 
 ### 8. Export the Inference Graph (Object Detection CLassifier)
+
+After the training, we now have to export the frozen inference graph i.e. the object detection classifier.
+
+```python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/faster_rcnn_inception_v2_pets.config --trained_checkpoint_prefix training/model.ckpt-XXXX --output_directory inference_graph```
+
+Run the following command from *\object_detection* folder and instead of XXXX in the command enter the highest numbered .ckpt file that is present in the *\object_detection\training* folder. Now your frozen inference graph is exported and ready for testing.
 
 ### 9. Test your Classifier
 
