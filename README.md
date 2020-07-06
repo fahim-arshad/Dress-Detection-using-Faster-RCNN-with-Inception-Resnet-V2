@@ -37,6 +37,7 @@ For this step create a folder directly in C drive and name it *“tensorflow1”
 | [Link](https://github.com/tensorflow/models/tree/d530ac540b0103caa194b4824af353f1b073553b) | TF 1.9 |
 | [Link](https://github.com/tensorflow/models/tree/abd504235f3c2eed891571d62f0a424e54a2dabc) | TF 1.8 |
 | [Link](https://github.com/tensorflow/models/tree/adfd5a3aca41638aa9fb297c5095f33d64446d8f) | TF 1.7 |
+| [Link](https://github.com/tensorflow/models/tree/079d67d9a0b3407e8d074a200780f3835413ef99) | TF 1.5 |
 | [Link](https://github.com/tensorflow/models/tree/r1.13.0) | TF 1.13 |
 | [Link](https://github.com/tensorflow/models/tree/r1.12.0) | TF 1.12 |
 | [Link](https://github.com/tensorflow/models/tree/b07b494e3514553633b132178b4c448f994d59df) | TF 1.10 |
@@ -46,7 +47,60 @@ Now download the Faster RCNN Inception V2 COCO model from the TensorFlow’s [mo
 
 Now download the full repository from this page(go to the top and clone download the repository) and extract it into *C:\tensorflow1\models\research\object_detection* folder. This will now provide you with the specific directory structure that is required. This repository contains the images, annotation data, tfrecord files and the .csv files required for this project.
 
+If you want to train your own object detection classifier with your own dataset you need to dekete the following files:
+- files in *\object_detection\training*
+- files in *\object_detection\inference_graph*
+- files in *\object_detection\images* "train/test_labels.csv" **not the test/train folders**
+- files in *\object_detection\images\train* and *\object_detection\images\test* **not the test/train folders**
+
 ### 3. Set up the Virtual Environment
+
+Open the Anaconda Command Prompt with administrative privileges and create a new virtual Tensorflow environment and activate it with the following commands.
+
+```conda create –n tensorflow1 pip python-3.5```
+```activate tensorlow1```
+```python –m pip install –upgrade pip```
+
+Install tensorflow-gpu with:
+
+`pip install --ignore-installed --upgrade tensorflow-gpu`
+
+**IMP: If you want to use the Tensorflow CPU version then just use “tensorflow” instead of “tensorflow-gpu” in the previous command.**
+
+Other libraries and packages required to run this project are:
+
+-	Opencv ```pip install opencv-python```
+-	Protobuf ```conda install -c anaconda protobuf```
+-	Matplotlib ```pip install matplotlib```
+-	Lxml ```pip install lxml```
+-	Contextlib2 ```pip install contextlib2```
+-	Xython ```pip install Cython```
+-	Pandas ```pip install pandas```
+-	Pillow ```pip install pillow```
+
+Opencv and pandas are not required by Tensorflow but are used in this project to generate tfrecord files and enable the of image, video and webcam scripts that are used in this project and are mentioned in the User Manual.
+
+Now we need to configure a PYTHONPATH variable and it will be configured every time the “tensorlfow1” environment is exited. This variable must point to *“\models”*, *“\models\research”*, and *“\models\research\slim”* directories:
+
+```set PYTHONPATH=C:\tensorflow1\models; C:\tensorflow1\models\research; C:\tensorflow1\models\research\slim```
+
+Now we need to compile the protobuf files. Because the command given on the TensorFlow’s Object Detection API installation page does not work on windows so we will have to call out each .proto file individually. First we will need to change the directory in in Anaconda Command Prompt:
+
+```cd C:\tensorflow1\models\research```
+
+Then:
+
+```protoc --python_out=. .\object_detection\protos\anchor_generator.proto .\object_detection\protos\argmax_matcher.proto .\object_detection\protos\bipartite_matcher.proto .\object_detection\protos\box_coder.proto .\object_detection\protos\box_predictor.proto .\object_detection\protos\eval.proto .\object_detection\protos\faster_rcnn.proto .\object_detection\protos\faster_rcnn_box_coder.proto .\object_detection\protos\grid_anchor_generator.proto .\object_detection\protos\hyperparams.proto .\object_detection\protos\image_resizer.proto .\object_detection\protos\input_reader.proto .\object_detection\protos\losses.proto .\object_detection\protos\matcher.proto .\object_detection\protos\mean_stddev_box_coder.proto .\object_detection\protos\model.proto .\object_detection\protos\optimizer.proto .\object_detection\protos\pipeline.proto .\object_detection\protos\post_processing.proto .\object_detection\protos\preprocessor.proto .\object_detection\protos\region_similarity_calculator.proto .\object_detection\protos\square_box_coder.proto .\object_detection\protos\ssd.proto .\object_detection\protos\ssd_anchor_generator.proto .\object_detection\protos\string_int_label_map.proto .\object_detection\protos\train.proto .\object_detection\protos\keypoint_box_coder.proto .\object_detection\protos\multiscale_anchor_generator.proto .\object_detection\protos\graph_rewriter.proto .\object_detection\protos\calibration.proto .\object_detection\protos\flexible_grid_anchor_generator.proto```
+
+This command will create a xxxx_pb2.py file from every xxxx.proto file in the “\object_detection\protos” folder.
+Now execute the following commands from “C:\tensorflow1\models\research” folder.
+
+```python setup.py build```
+
+```python setup.py install```
+
+The environment needed for testing the Dress Detection Classifier is all set up now.
+
 
 ### 4. Label pictures
 
