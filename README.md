@@ -101,7 +101,6 @@ Now execute the following commands from “C:\tensorflow1\models\research” fol
 
 The environment needed for testing the Dress Detection Classifier is all set up now.
 
-
 ### 4. Label pictures
 
 ### 5. Generate *.csv* and *tfrecord files*
@@ -113,3 +112,16 @@ The environment needed for testing the Dress Detection Classifier is all set up 
 ### 8. Export the Inference Graph (Object Detection CLassifier)
 
 ### 9. Test your Classifier
+
+If you want to test the Dress Detection System you can use “inference graph.pb” file in the *“object_detection”* folder but if you want to train the Dress Detection System again or you want to train your own Object Detection Classifier the relevant instructions are mentioned on the github tutuorial. For now the frozen_inference_graph.pb file in the *“\Object_detection\inference_graph”* folder contains the object (Dress) Detection Classifier.
+
+The repository contains python scripts required to test it out on image, video or webcam live feed. You need to change NUM_CLASSES variable in the scripts equal to the number of classes you want to detect. In our Dress Detection System we have a total of 6 classes so we are using “NUM_CLASSES = 6”. Move and rename a picture or video in the *\object_detection* folder change IMAGE/VIDEO_NAME variable in the *Obejct_detection_image/video.py* according to the image/video name in the folder. You can also plug in a USB webcam by using the Object_detection_webcam.py file.
+
+Now execute the following command in the Anaconda Command Prompt:
+
+```Idle```
+
+Note that the tensorflow1 environment should be activated as mentioned above and the PYTHONPATH variable is also set. Now IDLE window will be opened and you can run any one of the following scripts from there.
+
+A window will be opened after about 20 seconds and the object (Dress) Detector will be initialized. In the window the desired objects will be shown detected according to the accuracy of the system.
+
