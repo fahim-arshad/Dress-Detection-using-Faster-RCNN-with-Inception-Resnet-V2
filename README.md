@@ -107,8 +107,51 @@ The environment needed for testing the Dress Detection Classifier is all set up 
 
 ### 4. Label pictures
 
+The size of the pictures should not be greater than 200kb and the resolution should not be greater than 720x1280(or it will take much longer to train the model on the dataset). You can use your mobile camera to take the pictures and if your size or resoultion is too much there are many scripts available online that help can reduce the size of your pictures.
+
+Make sure to capture the images with different backgrounds, different lightning conditions, multiple desired and random objects in the picture so you can make a good dataset that will train a robust model. We have collected 1500 images of 6 desired objects atm i.e. skirts, t-shirts, jeans, trousers, sleeveless and shorts. you can collect your own dataset or use the dataset that we have provided in the repository.
+
+Move 80% of the image into the *object_detection/images/train* directory and 20% of the images into the *object_detection/images/test* directory.
+
+To Label the images we have used [LabelImg](https://github.com/tzutalin/labelImg). It is available on github and instructions to install and use it are mentioned clearly on the github link. Each image will have a corresponding .xml file after you have labelled the images by LabelImg in the same directory that the images are present in.
 
 ### 5. Generate *.csv* and *tfrecord files*
+
+TFRecord files serve as an input to the tensorflow training model. We will first convert the .xml files into csv files and then the csv files into the TFRecord files. The scripts used for these conversions are from [Dat Tran’s Raccoon Detector dataset](https://github.com/datitran/raccoon_dataset) but we have a different folder directory architecture so the sciprts are changed accordingly.
+
+From the \object_detection folder issue the following command:-
+
+```python xml_to_csv.py```
+
+This will create a train_label.csv and test_label.csv in the \object_detection\images folder.
+
+Now open edit the generate_tfrecord.py file from the \object_detection folder and at line 31 replace the label map with name of your own objects
+
+```
+def class_text_to_int(row_label):
+    if row_label == 'skirt':
+        return 1
+    elif row_label == 'trouser':
+        return 2
+    elif row_label == 't-shirt':
+        return 3
+    elif row_label == 'jeans':
+        return 4
+    elif row_label == 'sleeveless':
+        return 5
+    elif row_label == 'shorts':
+        return 6
+    else:
+        0
+```
+
+Save the generate_tfrecord.py and execute the following two command from the \object_detection folder.
+
+```python generate_tfrecord.py --csv_input=images\test_labels.csv --image_dir=images\test --output_path=test.record```
+
+```python generate_tfrecord.py --csv_input=images\train_labels.csv --image_dir=images\train --output_path=train.record```
+
+Now you will have a train.record and test.record file in your \object_detection folder
 
 ### 6. Create Label Map
 
