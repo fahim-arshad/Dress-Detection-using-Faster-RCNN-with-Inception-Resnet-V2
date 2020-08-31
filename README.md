@@ -29,7 +29,7 @@ Download and install [Anaconda](https://www.anaconda.com/products/individual#dow
 
 For this step create a folder directly in C drive and name it *“tensorflow1”*. This directory will include all the code form the github repository, the Tensorflow Object Detection API, the images from the dataset, configuration files and everything else needed for the object detection classifier. Download the full [Tensorflow Object Detection repository](https://github.com/tensorflow/models) extract the “model-master” folder directly into *“C:\tensorflow1”* directory you created in the previous step. Rename the *“model-master”* to *“models”*.
 
-**IMP: The Tensorflow Object Detection repository in continually updated by its developers so this table is given that shows which Object detection repository is suited with which Tensorflow version. It is always better to use the latest Tensorflow version with the latest Object Detection repository.**
+**IMP: The Tensorflow Object Detection repository in continually updated by its developers so this table is given that shows which Object detection repository is suited with which Tensorflow version. It is always better to use the latest Tensorflow version with the latest Object Detection repository. If you encounter any errors while using the latest versions of libraries and APIs it may be necessary to use the exact same [object detection repository](https://github.com/tensorflow/models/tree/079d67d9a0b3407e8d074a200780f3835413ef99) and Tensorflow v1.5. As our pc did not support the AVX instructions released in 2011(AVX instructions were introduced after tensorflow v1.6), we opted to use Tensorflow v1.5 instead of building tensorflow from source or changing the cpu flags. **
 
 | Object Detection Repository | Tensorflow Version |
 | --------------------------- | ------------------ |
@@ -47,7 +47,7 @@ Now download the Faster RCNN Inception V2 COCO model from the TensorFlow’s [mo
 
 Now download the full repository from this page(go to the top and clone download the repository) and extract it into *C:\tensorflow1\models\research\object_detection* folder. This will now provide you with the specific directory structure that is required. This repository contains the images, annotation data, tfrecord files and the .csv files required for this project.
 
-If you want to train your own object detection classifier with your own dataset you need to dekete the following files:
+If you want to train your own object detection classifier with your own dataset you need to delete the following files:
 - files in *\object_detection\training*
 - files in *\object_detection\inference_graph*
 - files in *\object_detection\images* "train/test_labels.csv" **not the test/train folders**
@@ -80,9 +80,11 @@ Other libraries and packages required to run this project are:
 
 Opencv and pandas are not required by Tensorflow but are used in this project to generate tfrecord files and enable the of image, video and webcam scripts that are used in this project and are mentioned in the User Manual.
 
-Now we need to configure a PYTHONPATH variable and it will be configured every time the “tensorlfow1” environment is exited. This variable must point to *“\models”*, *“\models\research”*, and *“\models\research\slim”* directories:
+Now we need to configure a PYTHONPATH variable and it will be configured every time the “tensorfow1” environment is exited. This variable must point to *“\models”*, *“\models\research”*, and *“\models\research\slim”* directories:
 
 ```set PYTHONPATH=C:\tensorflow1\models; C:\tensorflow1\models\research; C:\tensorflow1\models\research\slim```
+
+**You can test the PYTHONPATH variable by executing "echo %PYTHONPATH%" command to check whether it has been set or not**
 
 Now we need to compile the protobuf files. Because the command given on the TensorFlow’s Object Detection API installation page does not work on windows so we will have to call out each .proto file individually. First we will need to change the directory in in Anaconda Command Prompt:
 
@@ -90,10 +92,12 @@ Now we need to compile the protobuf files. Because the command given on the Tens
 
 Then:
 
-```protoc --python_out=. .\object_detection\protos\anchor_generator.proto .\object_detection\protos\argmax_matcher.proto .\object_detection\protos\bipartite_matcher.proto .\object_detection\protos\box_coder.proto .\object_detection\protos\box_predictor.proto .\object_detection\protos\eval.proto .\object_detection\protos\faster_rcnn.proto .\object_detection\protos\faster_rcnn_box_coder.proto .\object_detection\protos\grid_anchor_generator.proto .\object_detection\protos\hyperparams.proto .\object_detection\protos\image_resizer.proto .\object_detection\protos\input_reader.proto .\object_detection\protos\losses.proto .\object_detection\protos\matcher.proto .\object_detection\protos\mean_stddev_box_coder.proto .\object_detection\protos\model.proto .\object_detection\protos\optimizer.proto .\object_detection\protos\pipeline.proto .\object_detection\protos\post_processing.proto .\object_detection\protos\preprocessor.proto .\object_detection\protos\region_similarity_calculator.proto .\object_detection\protos\square_box_coder.proto .\object_detection\protos\ssd.proto .\object_detection\protos\ssd_anchor_generator.proto .\object_detection\protos\string_int_label_map.proto .\object_detection\protos\train.proto .\object_detection\protos\keypoint_box_coder.proto .\object_detection\protos\multiscale_anchor_generator.proto .\object_detection\protos\graph_rewriter.proto .\object_detection\protos\calibration.proto .\object_detection\protos\flexible_grid_anchor_generator.proto```
+```protoc --python_out=. .\object_detection\protos\anchor_generator.proto .\object_detection\protos\argmax_matcher.proto .\object_detection\protos\bipartite_matcher.proto .\object_detection\protos\box_coder.proto .\object_detection\protos\box_predictor.proto .\object_detection\protos\eval.proto .\object_detection\protos\faster_rcnn.proto .\object_detection\protos\faster_rcnn_box_coder.proto .\object_detection\protos\grid_anchor_generator.proto .\object_detection\protos\hyperparams.proto .\object_detection\protos\image_resizer.proto .\object_detection\protos\input_reader.proto .\object_detection\protos\losses.proto .\object_detection\protos\matcher.proto .\object_detection\protos\mean_stddev_box_coder.proto .\object_detection\protos\model.proto .\object_detection\protos\optimizer.proto .\object_detection\protos\pipeline.proto .\object_detection\protos\post_processing.proto .\object_detection\protos\preprocessor.proto .\object_detection\protos\region_similarity_calculator.proto .\object_detection\protos\square_box_coder.proto .\object_detection\protos\ssd.proto .\object_detection\protos\ssd_anchor_generator.proto .\object_detection\protos\string_int_label_map.proto .\object_detection\protos\train.proto .\object_detection\protos\keypoint_box_coder.proto .\object_detection\protos\multiscale_anchor_generator.proto .\object_detection\protos\graph_rewriter.proto .\object_detection\protos\calibration.proto```
 
 This command will create a xxxx_pb2.py file from every xxxx.proto file in the “\object_detection\protos” folder.
 Now execute the following commands from “C:\tensorflow1\models\research” folder.
+
+**If you ever get an error saying "Import Error: Cannot import xxxx_pb2, you will need to update the protoc command and include *.\object_detection\protos\xxxx.proto* in the protoc command" **
 
 ```python setup.py build```
 
