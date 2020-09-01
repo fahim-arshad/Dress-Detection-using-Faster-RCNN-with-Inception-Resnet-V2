@@ -29,7 +29,7 @@ Download and install [Anaconda](https://www.anaconda.com/products/individual#dow
 
 For this step create a folder directly in C drive and name it *“tensorflow1”*. This directory will include all the code form the github repository, the Tensorflow Object Detection API, the images from the dataset, configuration files and everything else needed for the object detection classifier. Download the full [Tensorflow Object Detection repository](https://github.com/tensorflow/models) extract the “model-master” folder directly into *“C:\tensorflow1”* directory you created in the previous step. Rename the *“model-master”* to *“models”*.
 
-**IMP: The Tensorflow Object Detection repository in continually updated by its developers so this table is given that shows which Object detection repository is suited with which Tensorflow version. It is always better to use the latest Tensorflow version with the latest Object Detection repository. If you encounter any errors while using the latest versions of libraries and APIs it may be necessary to use the exact same [object detection repository](https://github.com/tensorflow/models/tree/079d67d9a0b3407e8d074a200780f3835413ef99) and Tensorflow v1.5. As our pc did not support the AVX instructions released in 2011(AVX instructions were introduced after tensorflow v1.6), we opted to use Tensorflow v1.5 instead of building tensorflow from source or changing the cpu flags. **
+**IMP: The Tensorflow Object Detection repository in continually updated by its developers so this table is given that shows which Object detection repository is suited with which Tensorflow version. It is always better to use the latest Tensorflow version with the latest Object Detection repository. If you encounter any errors while using the latest versions of libraries and APIs it may be necessary to use the exact same [object detection repository](https://github.com/tensorflow/models/tree/079d67d9a0b3407e8d074a200780f3835413ef99) and Tensorflow v1.5. As our pc did not support the AVX instructions released in 2011(AVX instructions were introduced after tensorflow v1.6), we opted to use Tensorflow v1.5 instead of building tensorflow from source or changing the cpu flags.**
 
 | Object Detection Repository | Tensorflow Version |
 | --------------------------- | ------------------ |
@@ -155,7 +155,81 @@ Now you will have a train.record and test.record file in your \object_detection 
 
 ### 6. Create Label Map
 
+Use text editor to create a file and save it labelmap.pbtxt in the C:\tensorflow1\models\research\object_detection\training folder **.pbtx should be the format and not .txt**. Edit the labelmap.pbtx with the text editor and make a label map with the following format:-
+
+``` 
+item {
+  id: 1
+  name: 'skirt'
+}
+
+item {
+  id: 2
+  name: 'trouser'
+}
+
+item {
+  id: 3
+  name: 't-shirt'
+}
+
+item {
+  id: 4
+  name: 'jeans'
+}
+
+item {
+  id: 5
+  name: 'sleeveless' 
+}
+item {
+  id: 6
+  name: 'shorts'
+}  
+```
+The id numbers should be in the order as in the generate_tfrecord.py file.
+
 ### 7. Training
+
+In this step we will configure the training pipeline, define which model is to be used and what will be the parameters.
+
+From the *C:\tensorflow1\models\research\object_detection\samples\configs* folder copy and paste the faster_rcnn_inception_v2_pets.config file into the *C:\tensorflow1\models\research\object_detection\training* directory. Open and edit the faster_rcnn_inception_v2_pets.config file with a text editor. 
+
+**IMP: make sure to use forward slashes and double quotation markes when giving the directory paths or you will encounter errors**
+
+- **Line 9:** set the num_classes variable equal to the number of objects you want to  detect(in our case it was 6).
+
+- **Line 106:** set the fine_tune_checkpoint:-
+
+```"C:/tensorflow1/models/research/object_detection/faster_rcnn_inception_v2_coco_2018_01_28/model.ckpt"```
+
+- **Line 123:** set the input_path:-
+
+```"C:/tensorflow1/models/research/object_detection/train.record"```
+
+- **Line 125:** set the label_map_path:-
+
+```"C:/tensorflow1/models/research/object_detection/training/labelmap.pbtxt"```
+
+- **Line 130:** set the num_examples variable equal to the number of images in your *\object_detection\images\train* folder
+
+- **Line 135:** set the eval input_path:-
+
+```"C:/tensorflow1/models/research/object_detection/test.record"```
+
+- **Line 135:** set the eval label_map_path:-
+
+```"C:/tensorflow1/models/research/object_detection/training/labelmap.pbtxt"```
+
+Your pipeline has now been configured!
+
+## Start the Training
+
+Now it is time to start the training of your model. From the *\object_detection* directory run the following command:-
+
+```python train.py --logtostderr --train_dir=training/ --pipeline_config_path=training/faster_rcnn_inception_v2_pets.config```
+
+*We have used tensorflow v1.5, but from tensorflow v1.9 train.py file has been deprecated and model_main.py is being used instead. Although the train.py file is available in the \object_detection\legacy folder. You can move the train.py into the \object_detection folder and run it simply or you an use either of the following files to train your model. Just replace the 'train.py' with 'model_main.py' in the above command to use the model_main.py file for training.*
 
 ### 8. Export the Inference Graph (Object Detection CLassifier)
 
