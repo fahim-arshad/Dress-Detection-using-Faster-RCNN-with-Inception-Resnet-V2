@@ -231,6 +231,10 @@ Now it is time to start the training of your model. From the *\object_detection*
 
 *We have used tensorflow v1.5, but from tensorflow v1.9 train.py file has been deprecated and model_main.py is being used instead. Although the train.py file is available in the \object_detection\legacy folder. You can move the train.py into the \object_detection folder and run it simply or you an use either of the following files to train your model. Just replace the 'train.py' with 'model_main.py' in the above command to use the model_main.py file for training.*
 
+The training procedure will be initialized in about half a minute. Each step would show the loss and time per step. In our opinion the loss should be as low as 0.05 so that the model is trained enough. The model will take time according the capacity of your CPU and/or GPU.
+
+Checkpoints are saved after every few minutes. You can stop the training by issuing ctrl+c from the command prompt and resume it later as you want(It will automatically start from the last saved checkpoint)
+
 ### 8. Export the Inference Graph (Object Detection CLassifier)
 
 After the training, we now have to export the frozen inference graph i.e. the object detection classifier.
