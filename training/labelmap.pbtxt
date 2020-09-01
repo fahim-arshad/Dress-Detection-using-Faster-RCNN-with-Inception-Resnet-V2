@@ -1,0 +1,29 @@
+item {
+  id: 1
+  name: 'violation(Skirt)'
+}
+
+item {
+  id: 2
+  name: 'No Violation(trouser)'
+}
+
+item {
+  id: 3
+  name: 'No Violation(t-shirt)'
+}
+
+item {
+  id: 4
+  name: 'No Violation(jeans)'
+}
+
+item {
+  id: 5
+  name: 'Violation(Sleeveless)'
+}
+
+item {
+  id: 5
+  name: 'Violation(Shorts)'
+}
